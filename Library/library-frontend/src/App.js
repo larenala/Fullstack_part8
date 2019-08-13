@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { Query, Mutation, ApolloConsumer } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
 
 const App = () => {
@@ -45,6 +45,9 @@ const App = () => {
     }
   }
   `
+
+  
+
   return (
     <div>
       <div>
@@ -54,7 +57,12 @@ const App = () => {
       </div>
 
       <Query query={ALL_AUTHORS} pollInterval={2000} >
-        {(result) => <Authors result={result} show={page === 'authors'}/>}
+        {(result) => 
+          <Authors 
+            result={ result } 
+            show={page === 'authors'}
+          />
+        }
       </Query>
 
       <Query query={ALL_BOOKS} pollInterval={2000}>
@@ -72,8 +80,6 @@ const App = () => {
           />
         }
       </Mutation>
-      
-
     </div>
   )
 }

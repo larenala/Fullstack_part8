@@ -1,13 +1,34 @@
 import React from 'react'
+import EditAuthor from './EditAuthor';
+import { Mutation } from 'react-apollo'
+import { gql } from 'apollo-boost'
 
 const Authors = (props) => {
+
+  const UPDATE_AUTHOR=gql`
+  mutation updateAuthor($name: String!, $born: Int) {
+    editAuthor(
+      name: $name,
+      setBornTo: $born
+    ) {
+      name
+      born
+      bookCount
+      id
+    }
+  }
+  
+  `
+
   if (!props.show) {
     return null
   }
+  console.log('props ', props)
   if (props.result.loading) {
     return <div>loading...</div>
   }
   const authors = props.result.data.allAuthors
+
 
   return (
     <div>
@@ -32,7 +53,14 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-
+      <Mutation mutation={UPDATE_AUTHOR}>
+        {(updateAuthor) => 
+          <EditAuthor 
+            updateAuthor={updateAuthor}
+            authors={authors}
+          />
+        }
+      </Mutation>
     </div>
   )
 }
