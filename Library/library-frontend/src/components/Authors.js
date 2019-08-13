@@ -23,7 +23,6 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
-  console.log('props ', props)
   if (props.result.loading) {
     return <div>loading...</div>
   }
