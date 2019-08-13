@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { Query } from 'react-apollo'
+import { Query, Mutation, ApolloConsumer } from 'react-apollo'
 import { gql } from 'apollo-boost'
 
 const App = () => {
@@ -29,6 +29,22 @@ const App = () => {
     }
   }
   `
+  const CREATE_BOOK = gql`
+  mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
+    addBook(
+      title: $title,
+      author: $author,
+      published: $published,
+      genres: $genres,
+    ) {
+      title
+      author
+      published
+      genres
+      id
+    }
+  }
+  `
   return (
     <div>
       <div>
@@ -37,21 +53,26 @@ const App = () => {
         <button onClick={() => setPage('add')}>add book</button>
       </div>
 
-      <Query query={ALL_AUTHORS}>
+      <Query query={ALL_AUTHORS} pollInterval={2000} >
         {(result) => <Authors result={result} show={page === 'authors'}/>}
       </Query>
 
-      <Query query={ALL_BOOKS}>
+      <Query query={ALL_BOOKS} pollInterval={2000}>
         {(result) => <Books
           result={result}
           show={page === 'books'}
         /> }
       </Query>
       
-
-      <NewBook
-        show={page === 'add'}
-      />
+      <Mutation mutation={CREATE_BOOK}>
+        {(addBook) => 
+          <NewBook
+            show={page === 'add'}
+            addBook={addBook}
+          />
+        }
+      </Mutation>
+      
 
     </div>
   )
