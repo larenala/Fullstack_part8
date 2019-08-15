@@ -4,7 +4,6 @@ import { Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
 
 const Authors = (props) => {
-
   const UPDATE_AUTHOR=gql`
   mutation updateAuthor($name: String!, $born: Int) {
     editAuthor(
@@ -26,8 +25,9 @@ const Authors = (props) => {
   if (props.result.loading) {
     return <div>loading...</div>
   }
+  
   const authors = props.result.data.allAuthors
-
+  
 
   return (
     <div>
