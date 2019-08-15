@@ -1,3 +1,4 @@
+const config = require('./utils/config')
 const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const uuid = require('uuid/v1')
 const mongoose = require('mongoose')
@@ -6,11 +7,9 @@ const Author = require('./models/author')
 
 mongoose.set('useFindAndModify', false)
 
-const MONGODB_URI ="mongodb://fullstack:sekred2019sekred@ds263127.mlab.com:63127/library_db"
+console.log('connecting to', config .mongoUrl)
 
-console.log('connecting to', MONGODB_URI)
-
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+mongoose.connect(config .mongoUrl, { useNewUrlParser: true })
   .then(() => {
     console.log('connected to MongoDB')
   })
