@@ -102,7 +102,6 @@ const resolvers = {
           invalidArgs: args,
         })
       }  
-      return book   
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
