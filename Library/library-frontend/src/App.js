@@ -79,6 +79,7 @@ const App = () => {
           <Authors 
             result={ result } 
             show={page === 'authors'}
+            handleError={ handleError }
           />
         }
       </Query>

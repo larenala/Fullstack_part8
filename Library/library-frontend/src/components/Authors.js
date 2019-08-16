@@ -52,7 +52,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <Mutation mutation={UPDATE_AUTHOR}>
+      <Mutation mutation={UPDATE_AUTHOR} onError={props.handleError} >
         {(updateAuthor) => 
           <EditAuthor 
             updateAuthor={updateAuthor}
