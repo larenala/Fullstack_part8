@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost'
 
 const Authors = (props) => {
   const UPDATE_AUTHOR=gql`
-  mutation updateAuthor($name: String!, $born: Int) {
+  mutation updateAuthor($name: String!, $born: Int!) {
     editAuthor(
       name: $name,
       setBornTo: $born

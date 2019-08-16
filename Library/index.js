@@ -41,13 +41,13 @@ const typeDefs = gql`
     ): Book
     editAuthor(
       name: String!
-      setBornTo: Int
+      setBornTo: Int!
     ): Author
   }
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks: [Book]!
+    allBooks(genre: String): [Book]!
     allAuthors: [Author!]!
   }
 `
@@ -56,7 +56,13 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allBooks: () => Book.find({}).populate("author"),
+    allBooks: async (root, args) => {
+      const books = await Book.find({}).populate("author")
+      if (args.genre !== undefined) {
+        return books.filter(b => b.genres.includes(args.genre))
+      }
+      return books
+    },
     allAuthors: () => Author.find({}),
   },
   Author: {
@@ -79,6 +85,7 @@ const resolvers = {
       if (addedAuthor === null || addedAuthor === undefined ) {
         addedAuthor = new Author ({ 
           name: args.author, 
+          born: null,
           bookCount: 0
         })
       }
@@ -89,20 +96,22 @@ const resolvers = {
       book.author = addedAuthor.id
       try {
         await book.save()
+        
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
-      }     
+      }  
+      return book   
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
       if (!author) {
         return null
       }
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-      return updatedAuthor  
+      author.born = args.setBornTo
+      await author.save()
+      return author  
     }   
   }
 }

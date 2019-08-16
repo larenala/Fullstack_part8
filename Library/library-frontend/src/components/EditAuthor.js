@@ -10,11 +10,10 @@ const EditAuthor = (props) => {
 
   const submit = async (e) => {
     e.preventDefault()
-    
+    setSelectedOption('')
     await props.updateAuthor({
         variables: { name, born }
-    })
-    setSelectedOption('')
+    }) 
     setName('')
     setBorn('')
   }
