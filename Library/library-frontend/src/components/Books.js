@@ -9,10 +9,9 @@ const Books = (props) => {
   const books = props.result.data.allBooks
 
   if (props.showFavorites ) {
-    
     return (
       <div>
-        <h2>books</h2>
+        <h2>recommendations</h2>
       </div>
     )   
   }
