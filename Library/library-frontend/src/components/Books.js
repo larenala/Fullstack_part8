@@ -32,7 +32,7 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-
+      { showAll ? <></> : <p>in genre <strong>{ genre }</strong></p>} 
       <table>
         <tbody>
           <tr>
@@ -54,12 +54,13 @@ const Books = (props) => {
           ) : 
             books.map(book =>  {
               if (book.genres.includes(genre)) {
-                return (
+                return (                   
                   <tr key={book.title}>
                     <td>{book.title}</td>
                     <td>{book.author.name}</td>
                     <td>{book.published}</td>
                   </tr>
+                  
                 )
               }
             }
