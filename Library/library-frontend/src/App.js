@@ -3,6 +3,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
+import Recommendations from './components/Recommendations'
 import { Query, Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
 import { useMutation, useApolloClient } from '@apollo/react-hooks'
@@ -64,6 +65,8 @@ const App = () => {
   const [page, setPage] = useState('authors')
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
+  const [showAll, setShowAll ] = useState(true)
+  const [showFavorites, setShowFavorites] = useState(false)
   const client = useApolloClient()
 
   const handleError = (error) => {
@@ -71,6 +74,11 @@ const App = () => {
     setTimeout(() => {
       setErrorMessage(null)
     }, 5000)
+  }
+
+  const handleClick = () => {
+    setShowFavorites(true)
+    setPage('books')
   }
 
   const [login] = useMutation(LOGIN, {
@@ -101,6 +109,12 @@ const App = () => {
       </div>
     )
   }
+
+  const showBooks = () => {
+    setShowFavorites(false)
+    setShowAll(true)
+    setPage('books')
+  }
   
 
   return (
@@ -112,13 +126,14 @@ const App = () => {
       }
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
+        <button onClick={showBooks}>books</button>
         
         { (!token) ? 
           <button onClick={() => setPage('login')}>login</button> 
           :
           <>
-            <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('add book')}>add book</button>
+            <button onClick={handleClick}>recommend</button>
             <button onClick={logout}>logout</button> 
           </>
         }          
@@ -138,13 +153,17 @@ const App = () => {
         {(result) => <Books
           result={result}
           show={page === 'books'}
+          showFavorites={showFavorites}
+          setShowFavorites={setShowFavorites}
+          showAll = {showAll}
+          setShowAll={setShowAll}
         /> }
       </Query>
       
       <Mutation mutation={CREATE_BOOK} onError={handleError} refetchQueries={[{ query: ALL_BOOKS }]}>
         {(addBook) => 
           <NewBook
-            show={page === 'add'}
+            show={page === 'add book'}
             addBook={addBook}
             
           />

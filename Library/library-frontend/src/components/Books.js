@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
 
 const Books = (props) => {
-  const [ showAll, setShowAll] = useState(true)
   const [ genre, setGenre ] = useState('')
 
   if (!props.show) {
     return null
   }
   const books = props.result.data.allBooks
-  
+
+  if (props.showFavorites ) {
+    
+    return (
+      <div>
+        <h2>books</h2>
+      </div>
+    )   
+  }
+
   const findGenres = () => {
     let genres = []
     books.map(b => b.genres.map(genre => {
@@ -22,9 +30,9 @@ const Books = (props) => {
   const handleClick = (e) => {
     if (e.target.value === 'all') {
       setGenre('')
-      setShowAll(true)
+      props.setShowAll(true)
     } else {
-      setShowAll(false)
+      props.setShowAll(false)
       setGenre(e.target.value)
     }
   }
@@ -32,7 +40,7 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-      { showAll ? <></> : <p>in genre <strong>{ genre }</strong></p>} 
+      { props.showAll ? <></> : <p>in genre <strong>{ genre }</strong></p>} 
       <table>
         <tbody>
           <tr>
@@ -44,7 +52,7 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {showAll ? 
+          {props.showAll ? 
           books.map(book =>
             <tr key={book.title}>
               <td>{book.title}</td>
