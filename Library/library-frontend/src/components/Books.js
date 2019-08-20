@@ -8,6 +8,7 @@ const Books = (props) => {
     return null
   }
   const books = props.result.data.allBooks
+  
   const findGenres = () => {
     let genres = []
     books.map(b => b.genres.map(genre => {
@@ -19,7 +20,6 @@ const Books = (props) => {
   }
 
   const handleClick = (e) => {
-    console.log('value ', e.target.value)
     if (e.target.value === 'all') {
       setGenre('')
       setShowAll(true)

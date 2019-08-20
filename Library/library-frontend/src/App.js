@@ -89,7 +89,7 @@ const App = () => {
       {errorMessage}
     </div>
 
-  if (!token) {
+  if (!token && page === 'login') {
     return (
       <div>
         {errorNotification()}
@@ -113,11 +113,15 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
+        
         { (!token) ? 
           <button onClick={() => setPage('login')}>login</button> 
           :
-          <button onClick={logout}>logout</button> }
+          <>
+            <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={logout}>logout</button> 
+          </>
+        }          
       </div>
 
       <Query query={ALL_AUTHORS} pollInterval={2000} >
