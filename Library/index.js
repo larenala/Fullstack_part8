@@ -92,7 +92,10 @@ const resolvers = {
       }
       return books
     },
-    allAuthors: () => Author.find({}),
+    allAuthors: () =>  {
+      console.log('Author.find')
+      return Author.find({})
+    },
     me: (root, args, context) => {
       return context.currentUser
     },
@@ -103,14 +106,6 @@ const resolvers = {
       born: (root) => root.born,
       bookCount: (root) => root.bookCount 
   },
-  /*Book: {
-    author: (root) => {
-      return { 
-        name: root.author,
-        id: root.id
-      }
-    }
-  },*/ 
   Mutation: {
     addBook: async (root, args, context) => {   
       const currentUser = context.currentUser
@@ -126,7 +121,9 @@ const resolvers = {
           bookCount: 0
         })
       }
-      addedAuthor.bookCount = addedAuthor.bookCount+1
+      const booksByThisAuthor = await  Book.find({}).filter(a => a.name === addedAuthor.name)
+      console.log(booksByThisAuthor)
+      addedAuthor.bookCount = booksByThisAuthor.length
       
       await addedAuthor.save()
       let book = new Book ({ ...args })
