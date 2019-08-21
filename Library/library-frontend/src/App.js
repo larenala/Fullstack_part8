@@ -110,7 +110,9 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      console.log(subscriptionData)
+      console.log(subscriptionData.data.bookAdded)
+      console.log(subscriptionData.data.bookAdded.title)
+      window.alert(`Lisätty uusi kirja ${subscriptionData.data.bookAdded.title} kirjoittajalta ${subscriptionData.data.bookAdded.author.name}`)
     }
   })
 
