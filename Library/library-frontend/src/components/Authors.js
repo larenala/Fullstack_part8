@@ -1,6 +1,6 @@
 import React from 'react'
 import EditAuthor from './EditAuthor';
-import { Mutation } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
 const Authors = (props) => {
@@ -19,14 +19,19 @@ const Authors = (props) => {
   
   `
 
-  if (!props.show) {
+  const authors = props.result.data.allAuthors
+  
+  const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
+    onError: props.handleError
+  })
+
+  if (!props.show ) {
     return null
   }
   if (props.result.loading) {
     return <div>loading...</div>
   }
   
-  const authors = props.result.data.allAuthors
   
 
   return (
@@ -52,14 +57,14 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <Mutation mutation={UPDATE_AUTHOR} onError={props.handleError} >
-        {(updateAuthor) => 
-          <EditAuthor 
-            updateAuthor={updateAuthor}
-            authors={authors}
-          />
-        }
-      </Mutation>
+
+      <EditAuthor 
+        updateAuthor={updateAuthor}
+        authors={authors}
+      />
+        
+        
+      
     </div>
   )
 }
