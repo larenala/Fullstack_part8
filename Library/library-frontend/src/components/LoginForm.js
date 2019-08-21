@@ -12,7 +12,6 @@ const LoginForm = (props) => {
     })
     
     if (result) {
-      console.log('result ', result)
       const token = result.data.login.value
       props.setToken(token)
       localStorage.setItem('library-user-token', token)

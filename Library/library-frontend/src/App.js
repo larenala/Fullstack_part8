@@ -3,10 +3,10 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import Recommendations from './components/Recommendations'
 import { Query, Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
-import { useMutation, useApolloClient } from '@apollo/react-hooks'
+import { useMutation, useSubscription ,useApolloClient } from '@apollo/react-hooks'
+
 
 const ALL_AUTHORS= gql`
   {
@@ -18,30 +18,36 @@ const ALL_AUTHORS= gql`
     }
   }
   `
+  const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    author {
+      name
+      id
+    }
+    published
+    id
+    genres
+  }
+  `
 
 const ALL_BOOKS = gql`
   {
     allBooks  {
-      title
-      author {
-        name
-        id
-      }
-      published
-      id
-      genres
+      ...BookDetails
     }
   }
+  ${BOOK_DETAILS}
   `
 
-const ME = gql`
-  {
-    me {
-      username
-      favoriteGenre
+const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
     }
-  }
-  `
+  } 
+${BOOK_DETAILS}
+`
 
 const CREATE_BOOK = gql`
 mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
@@ -78,7 +84,6 @@ const App = () => {
   const [showAll, setShowAll ] = useState(true)
   const [showFavorites, setShowFavorites] = useState(false)
   const client = useApolloClient()
-  const [ currentUser, setCurrentUser ] = useState('')
 
   const handleError = (error) => {
     setErrorMessage(error.graphQLErrors[0].message)
@@ -102,6 +107,12 @@ const App = () => {
     client.resetStore()
     setPage('authors')
   }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log(subscriptionData)
+    }
+  })
 
   const errorNotification = () => 
     errorMessage &&

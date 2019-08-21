@@ -61,7 +61,7 @@ const NewBook = (props) => {
           <button onClick={addGenre} type="button">add genre</button>
         </div>
         <div>
-          genres: {genres.join(' ')}
+          genres: {genres.join(', ')}
         </div>
         <button type='submit'>create book</button>
       </form>

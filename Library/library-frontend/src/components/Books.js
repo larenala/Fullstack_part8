@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 
 const Books = (props) => {
   const [ genre, setGenre ] = useState('')
-  const token = localStorage.getItem('library-user-token')
-  console.log('token ', token)
   if (!props.show) {
     return null
   }
@@ -24,6 +22,7 @@ const Books = (props) => {
     if (!genres.includes(genre)) {
       genres = genres.concat(genre)
     }
+    return genres
   }))
     return genres
   }
@@ -68,8 +67,7 @@ const Books = (props) => {
                     <td>{book.title}</td>
                     <td>{book.author.name}</td>
                     <td>{book.published}</td>
-                  </tr>
-                  
+                  </tr>                
                 )
               }
             }
