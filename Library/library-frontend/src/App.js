@@ -183,7 +183,7 @@ const App = () => {
         }          
       </div>
 
-      <Query query={ALL_AUTHORS} pollInterval={2000} >
+      <Query query={ALL_AUTHORS}  >
         {(result) => 
           <Authors 
             result={ result } 

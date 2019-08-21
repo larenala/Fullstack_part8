@@ -55,7 +55,7 @@ const Authors = (props) => {
               <td>{a.bookCount}</td>
             </tr>
           )}
-        </tbody>
+        </tbody>         
       </table>
 
       <EditAuthor 

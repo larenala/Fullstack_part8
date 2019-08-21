@@ -118,18 +118,17 @@ const resolvers = {
         addedAuthor = new Author ({ 
           name: args.author, 
           born: null,
-          bookCount: 0
+          bookCount: 1
         })
       }
-      const booksByThisAuthor = await  Book.find({}).filter(a => a.name === addedAuthor.name)
-      console.log(booksByThisAuthor)
-      addedAuthor.bookCount = booksByThisAuthor.length
       
-      await addedAuthor.save()
-      let book = new Book ({ ...args })
-      book.author = addedAuthor.id
-      try {
+      try {     
+        let book = new Book ({ ...args })
+        book.author = addedAuthor.id
         await book.save()
+        const booksByThisAuthor = await  Book.find({ author: addedAuthor })
+        addedAuthor.bookCount = booksByThisAuthor.length 
+        await addedAuthor.save() 
         const populatedBook = await Book.findOne({title: book.title}).populate("author")
         await populatedBook.save()
         pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
