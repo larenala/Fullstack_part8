@@ -33,6 +33,16 @@ const ALL_BOOKS = gql`
     }
   }
   `
+
+const ME = gql`
+  {
+    me {
+      username
+      favoriteGenre
+    }
+  }
+  `
+
 const CREATE_BOOK = gql`
 mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
   addBook(
@@ -68,6 +78,7 @@ const App = () => {
   const [showAll, setShowAll ] = useState(true)
   const [showFavorites, setShowFavorites] = useState(false)
   const client = useApolloClient()
+  const [ currentUser, setCurrentUser ] = useState('')
 
   const handleError = (error) => {
     setErrorMessage(error.graphQLErrors[0].message)

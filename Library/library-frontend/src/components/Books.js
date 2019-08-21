@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 
+
 const Books = (props) => {
   const [ genre, setGenre ] = useState('')
-
+  const token = localStorage.getItem('library-user-token')
+  console.log('token ', token)
   if (!props.show) {
     return null
   }
   const books = props.result.data.allBooks
 
-  if (props.showFavorites ) {
+  if (props.showFavorites === true ) {
     return (
       <div>
         <h2>recommendations</h2>
