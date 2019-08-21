@@ -133,13 +133,15 @@ const resolvers = {
       book.author = addedAuthor.id
       try {
         await book.save()
-        
+        const populatedBook = await Book.findOne({title: book.title}).populate("author")
+        await populatedBook.save()
+        pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
+
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
-      }  
-      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      }      
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
