@@ -93,7 +93,7 @@ const resolvers = {
       return books
     },
     allAuthors: () =>  {
-      console.log('Author.find')
+      console.log('Author find')
       return Author.find({})
     },
     me: (root, args, context) => {
@@ -104,7 +104,14 @@ const resolvers = {
       name: (root) => root.name,
       id: (root) => root.id,
       born: (root) => root.born,
-      bookCount: (root) => root.bookCount 
+      bookCount: async (root) => {
+        const author = await Author.findOne({_id: root.id})
+        console.log('author find One')
+        const booksByThisAuthor = await Book.find({author: author})
+        console.log('booksByThisAuthor')
+        const count = booksByThisAuthor.length
+        return count
+      } 
   },
   Mutation: {
     addBook: async (root, args, context) => {   
@@ -118,7 +125,6 @@ const resolvers = {
         addedAuthor = new Author ({ 
           name: args.author, 
           born: null,
-          bookCount: 1
         })
       }
       

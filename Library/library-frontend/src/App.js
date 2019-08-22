@@ -149,6 +149,7 @@ const App = () => {
         <LoginForm
           login={login}
           setToken={(token) => setToken(token)}
+          setPage={setPage}
         />
       </div>
     )
@@ -183,7 +184,7 @@ const App = () => {
         }          
       </div>
 
-      <Query query={ALL_AUTHORS}  >
+      <Query query={ALL_AUTHORS} pollInterval={2000} >
         {(result) => 
           <Authors 
             result={ result } 
@@ -203,7 +204,7 @@ const App = () => {
           setShowAll={setShowAll}
         /> 
       
-      <NewBook show={page === 'add book'} addBook={addBook} />
+      <NewBook show={page === 'add book'} addBook={addBook} setPage={setPage} />
 
     </div>
   )
