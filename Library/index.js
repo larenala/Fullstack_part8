@@ -36,6 +36,7 @@ const typeDefs = gql`
     name: String!
     born: Int
     bookCount: Int
+    authorOf: [Book!]!
     id: ID!
   }
   type User {
@@ -93,8 +94,7 @@ const resolvers = {
       return books
     },
     allAuthors: () =>  {
-      console.log('Author find')
-      return Author.find({})
+      return Author.find({}).populate('authorOf')
     },
     me: (root, args, context) => {
       return context.currentUser
@@ -104,14 +104,8 @@ const resolvers = {
       name: (root) => root.name,
       id: (root) => root.id,
       born: (root) => root.born,
-      bookCount: async (root) => {
-        const author = await Author.findOne({_id: root.id})
-        console.log('author find One')
-        const booksByThisAuthor = await Book.find({author: author})
-        console.log('booksByThisAuthor')
-        const count = booksByThisAuthor.length
-        return count
-      } 
+      authorOf: (root) => root.authorOf,
+      bookCount: async (root) => root.authorOf.length
   },
   Mutation: {
     addBook: async (root, args, context) => {   
@@ -132,8 +126,7 @@ const resolvers = {
         let book = new Book ({ ...args })
         book.author = addedAuthor.id
         await book.save()
-        const booksByThisAuthor = await  Book.find({ author: addedAuthor })
-        addedAuthor.bookCount = booksByThisAuthor.length 
+        addedAuthor.authorOf = addedAuthor.authorOf.concat(book.id) 
         await addedAuthor.save() 
         const populatedBook = await Book.findOne({title: book.title}).populate("author")
         await populatedBook.save()
