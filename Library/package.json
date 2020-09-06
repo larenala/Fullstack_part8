@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "apollo-link-ws": "^1.0.18",
-    "apollo-server": "^2.8.1",
+    "apollo-server": "^2.17.0",
     "dotenv": "^8.0.0",
     "graphql": "^14.4.2",
     "jsonwebtoken": "^8.5.1",
